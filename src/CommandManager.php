@@ -49,7 +49,7 @@ final class CommandManager
         foreach ($ofMethods as $method => $ofMethod) {
             $cmds = [];
             if ($main = ($ofMethod['doc']['CMD'] ?? null)) {
-                $cmds[] = \strtolower($cmdPrefix ? \join('.', [$cmdPrefix, $main]) : $main);
+                $cmds[] = \strtolower($cmdPrefix ? ($main = \join('.', [$cmdPrefix, $main])) : $main);
             }
             if ($aliases = ($ofMethod['doc']['ALIAS'] ?? [])) {
                 if (! $main) {
@@ -70,15 +70,19 @@ final class CommandManager
                 if ($conflict = (self::$data[$cmd] ?? false)) {
                     throw new CLIExceptor('DUPLICATE_COMMAND', \compact('current', 'conflict'));
                 }
+
                 self::$data[$cmd] = $current;
-                $idx = \count(self::$data ?? []) - 1;
-                if ($type === Convention::SRC_SYSTEM) {
-                    self::$system[$cmd] = $idx;
-                } elseif ($type === Convention::SRC_VENDOR) {
-                    self::$vendor[$cmd] = $idx;
-                } elseif ($type === Convention::SRC_DOMAIN) {
-                    $domain = DMN::name($class, true);
-                    self::$domain[$domain][$cmd] = $idx;
+
+                switch ($type) {
+                    case Convention::SRC_DOMAIN:
+                        self::$domain[$cmd] = DMN::name($class);
+                        break;
+                    case Convention::SRC_SYSTEM:
+                        self::$system[$cmd] = \count(self::$data) - 1;
+                        break;
+                    case Convention::SRC_VENDOR:
+                        self::$vendor[$cmd] = self::vendor($class);
+                        break;
                 }
             }
         }

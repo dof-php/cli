@@ -237,7 +237,7 @@ final class Command
      */
     public function cmdVendor($console)
     {
-        $console->setOption('vendor', true);
+        $console->setOption('vendor', $console->getOption('vendor', true));
 
         $this->cmdAll($console);
     }
@@ -249,7 +249,7 @@ final class Command
      */
     public function cmdDomain($console)
     {
-        $console->setOption('domain', true);
+        $console->setOption('domain', $console->getOption('domain', true));
 
         $this->cmdAll($console);
     }
@@ -266,19 +266,22 @@ final class Command
         $system = CommandManager::getSystem();
         $domain = CommandManager::getDomain();
         $vendor = CommandManager::getVendor();
-        $filter = null;
+        $filter = $_filter = null;
         if ($console->hasOption('system')) {
             $filter = $system;
-        } elseif ($console->hasOption('vendor')) {
+        } elseif ($_filter = $console->getOption('vendor')) {
             $filter = $vendor;
-        } elseif ($console->hasOption('domain')) {
+        } elseif ($_filter = $console->getOption('domain')) {
             $filter = $domain;
         }
         \ksort($commands);
 
         $console->line();
         foreach ($commands as $cmd => $attr) {
-            if ((! \is_null($filter)) && (! isset($filter[$cmd]))) {
+            if ($filter && (! isset($filter[$cmd]))) {
+                continue;
+            }
+            if ($_filter && ($_filter != ($filter[$cmd] ?? null))) {
                 continue;
             }
 
@@ -296,7 +299,7 @@ final class Command
 
             // group cmds alphabetically
             if (false !== \next($commands)) {
-                if (! Str::eq(\mb_strcut($cmd, 0, 1), \mb_strcut(key($commands), 0, 1))) {
+                if (! Str::eq(\mb_strcut($cmd, 0, 1), \mb_strcut(\key($commands), 0, 1))) {
                     $console->line();
                 }
             } else {
