@@ -129,7 +129,8 @@ final class Command
      */
     public function run($console)
     {
-        $php = $console->getParams()[0] ?? null;
+        $params = $console->getParams();
+        $php = $params[0] ?? null;
         if (! $php) {
             return $console->fail('NoPhpScriptToRun');
         }
@@ -139,6 +140,10 @@ final class Command
                 return $console->exceptor('PhpScriptNotExists', ['path' => $php]);
             }
         }
+
+        // reset console params for current script
+        unset($params[0]);
+        $console->setParams(\array_values($params));
 
         try {
             (function ($php) use ($console) {
