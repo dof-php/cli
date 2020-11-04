@@ -16,8 +16,8 @@ class __NAME__
      * @CMD(cmd1)
      * @_Alias(c1__CMD__)
      * @Desc(Command Description)
-     * @Option(option1){notes=Command Option Description}
-     * @Argv(#1){notes=Command Parameters Description}
+     * @_Option(option1){notes=Command Option Description}
+     * @_Argv(#1){notes=Command Parameters Description}
      */
     public function cmd1($console)
     {
