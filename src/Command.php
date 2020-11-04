@@ -754,6 +754,12 @@ PHP;
         $command = \str_replace('__NAMESPACE__', Format::namespace($name, FS::DS, false, true), $command);
         $command = \str_replace('__NAME__', \basename($name), $command);
 
+        $cmd = '';
+        if ($console->hasOption('cmd')) {
+            $cmd = '.'.\strtolower(\basename($name));
+        }
+        $command = \str_replace('__CMD__', $cmd, $command);
+
         $console->task("Creating Command: {$pathof}", function () use ($class, $command) {
             FS::unlink($class);
             FS::save($class, $command);

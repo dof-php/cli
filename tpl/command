@@ -8,13 +8,13 @@ use Throwable;
 // use Domain\__DOMAIN__\Service\CommandActionService;
 
 /**
- * @CMD(__DOMAIN_LOWER__)
+ * @CMD(__DOMAIN_LOWER____CMD__)
  */
 class __NAME__
 {
     /**
      * @CMD(cmd1)
-     * @Alias(c1)
+     * @Alias(c1__CMD__)
      * @Desc(Command Description)
      * @Option(option1){notes=Command Option Description}
      * @Argv(#1){notes=Command Parameters Description}
