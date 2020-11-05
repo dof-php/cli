@@ -734,7 +734,7 @@ PHP;
             $console->fail('DomainNotExists', \compact('domain'));
         }
         $name = \str_replace('\\', FS::DS, Format::u2c($console->getOption('cmd', 'Command'), CASE_UPPER));
-        if (Str::end($name, '.php', true)) {
+        if (Str::end('.php', $name, true)) {
             $name = Str::shift($name, 4, true);
         }
 
