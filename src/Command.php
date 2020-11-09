@@ -137,7 +137,7 @@ final class Command
         if (! \is_file($php)) {
             $php = DOF::path($php);
             if (! \is_file($php)) {
-                return $console->exceptor('PhpScriptNotExists', ['path' => $php]);
+                return $console->fail('PhpScriptNotExists', ['path' => $php]);
             }
         }
 
